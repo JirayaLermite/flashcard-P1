@@ -4,198 +4,314 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flashcards Véhicules Militaires</title>
+
 <style>
-:root{
---primary:#1e88e5;
---good:#43a047;
---bad:#e53935;
---card:#fff;
---text:#0d47a1;
-}
+*{box-sizing:border-box}
 body{
-margin:0;height:100vh;font-family:system-ui,Segoe UI;overflow:hidden;
-display:flex;align-items:center;justify-content:center;
+margin:0;
+font-family:system-ui,Segoe UI;
 background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-background-size:400% 400%;animation: bgmove 20s linear infinite;color:white;
+color:white;
+height:100vh;
+overflow:hidden;
 }
-@keyframes bgmove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-#loginBox{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-background:white;color:black;padding:25px;border-radius:20px;
-box-shadow:0 15px 30px rgba(0,0,0,.4);max-width:320px;z-index:1000;}
-#loginBox input{width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;}
-button{border:none;border-radius:16px;padding:12px 25px;font-weight:bold;
-background:var(--primary);color:white;cursor:pointer;position:relative;overflow:hidden;
-box-shadow:0 6px 20px rgba(0,0,0,0.35);transition:.3s;}
-button::after{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
-background:rgba(255,255,255,0.2);transform:skewX(-20deg);transition:0.5s;}
-button:hover::after{left:100%;}
-button:hover{transform:scale(1.08);box-shadow:0 12px 30px rgba(0,0,0,0.5);}
-.top{position:fixed;top:10px;left:50%;transform:translateX(-50%);
-display:flex;gap:10px;flex-wrap:wrap;z-index:900;}
-.dropdown{position:relative;}
-.dropdown-content{display:none;position:absolute;top:50px;left:50%;
-transform:translateX(-50%);background:rgba(255,255,255,0.95);color:black;width:260px;
-max-height:300px;overflow:auto;border-radius:16px;padding:10px;box-shadow:0 10px 25px rgba(0,0,0,0.4);z-index:950;}
-.dropdown.show .dropdown-content{display:block;}
-.dropdown-content input{width:100%;padding:8px;border-radius:8px;margin-bottom:8px;border:1px solid #ccc;}
-#card{position:relative;width:90%;height:80%;max-width:900px;max-height:600px;
-perspective:1200px;cursor:pointer;transition: transform .5s ease, opacity .5s ease; z-index:1;}
-#inner{width:100%;height:100%;background:var(--card);border-radius:20px;
-transform-style:preserve-3d;transition:.8s;box-shadow:0 15px 40px rgba(0,0,0,.5);}
-#card.flip #inner{transform:rotateY(180deg);box-shadow:0 25px 60px rgba(0,0,0,.7);}
-.face{position:absolute;width:100%;height:100%;backface-visibility:hidden;
-display:flex;align-items:center;justify-content:center;padding:12px;border-radius:20px;}
-.front img{width:100%;height:100%;object-fit:contain;border-radius:12px;}
-.back{transform:rotateY(180deg);font-size:4vw;font-weight:bold;color:var(--text);
-display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;text-shadow:0 2px 6px rgba(0,0,0,0.3);}
-.quiz{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
-display:flex;justify-content:center;gap:10px;flex-wrap:wrap;opacity:0;transition:opacity .4s ease;z-index:2;}
-.quiz.show{opacity:1;}
-.good{background:var(--good)}
-.bad{background:var(--bad)}
+
+/* ===== LOGIN ===== */
+#loginOverlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.85);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:10000;
+}
+#loginBox{
+background:white;
+color:black;
+padding:30px;
+border-radius:20px;
+width:90%;
+max-width:320px;
+text-align:center;
+}
+#loginBox input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+#loginBox button{
+margin-top:15px;
+padding:12px;
+width:100%;
+border:none;
+border-radius:12px;
+background:#1e88e5;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* ===== APP ===== */
+#app{
+display:none;
+}
+
+/* ===== TOP BAR ===== */
+.top{
+position:fixed;
+top:10px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+gap:10px;
+z-index:3000;
+}
+button{
+border:none;
+border-radius:14px;
+padding:12px 18px;
+font-weight:bold;
+cursor:pointer;
+color:white;
+background:#1e88e5;
+box-shadow:0 6px 20px rgba(0,0,0,.4);
+}
+
+/* ===== MENU PAYS ===== */
+#countryMenu{
+position:fixed;
+top:70px;
+left:50%;
+transform:translateX(-50%);
+background:white;
+color:black;
+width:280px;
+max-height:60vh;
+overflow-y:auto;
+border-radius:16px;
+padding:12px;
+display:none;
+z-index:4000;
+box-shadow:0 15px 40px rgba(0,0,0,.6);
+}
+#countryMenu input{
+width:100%;
+padding:8px;
+margin-bottom:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+#countryMenu label{
+display:block;
+padding:6px;
+}
+
+/* ===== CARD ===== */
+#card{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:92vw;
+max-width:900px;
+height:72vh;
+max-height:560px;
+perspective:1200px;
+cursor:pointer;
+z-index:1;
+}
+#inner{
+width:100%;
+height:100%;
+background:white;
+border-radius:22px;
+transform-style:preserve-3d;
+transition:.8s;
+box-shadow:0 20px 50px rgba(0,0,0,.6);
+}
+#card.flip #inner{transform:rotateY(180deg)}
+.face{
+position:absolute;
+width:100%;
+height:100%;
+backface-visibility:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:22px;
+padding:12px;
+}
+.front img{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+.back{
+transform:rotateY(180deg);
+color:#0d47a1;
+font-size:clamp(24px,5vw,48px);
+font-weight:bold;
+text-align:center;
+}
+
+/* ===== QUIZ BUTTONS ===== */
+#quiz{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+gap:12px;
+opacity:0;
+pointer-events:none;
+transition:.3s;
+z-index:2500;
+}
+#quiz.show{
+opacity:1;
+pointer-events:auto;
+}
+.good{background:#43a047}
+.bad{background:#e53935}
 </style>
 </head>
+
 <body>
 
-<div id="loginBox">
-<h2>🔒 Accès</h2>
-<input type="password" id="pwd" placeholder="Mot de passe"><br><br>
-<button onclick="loginUser()">Entrer</button>
-<p id="err" style="color:red"></p>
+<!-- LOGIN -->
+<div id="loginOverlay">
+  <div id="loginBox">
+    <h2>🔒 Accès</h2>
+    <input type="password" id="pwd" placeholder="Mot de passe">
+    <button onclick="login()">Entrer</button>
+    <p id="err" style="color:red"></p>
+  </div>
 </div>
 
-<div id="app" class="hidden">
-<div class="top">
-<button id="countryBtn">🌍 Pays</button>
-<button onclick="start()">▶️ Démarrer</button>
-<button onclick="fullscreen()">⛶ Plein écran</button>
-</div>
+<!-- APP -->
+<div id="app">
 
-<div class="dropdown" id="menu">
-<div class="dropdown-content">
-<input placeholder="Rechercher..." oninput="filterCountries(this.value)">
-<div id="countryList"></div>
-</div>
-</div>
+  <!-- TOP -->
+  <div class="top">
+    <button onclick="toggleMenu()">🌍 Pays</button>
+    <button onclick="start()">▶️ Démarrer</button>
+  </div>
 
-<div id="card" onclick="flip()">
-<div id="inner">
-<div class="face front" id="front"></div>
-<div class="face back" id="back"></div>
-</div>
-</div>
+  <!-- MENU -->
+  <div id="countryMenu">
+    <input placeholder="Rechercher..." oninput="filterCountries(this.value)">
+    <div id="countryList"></div>
+  </div>
 
-<div class="quiz" id="quiz">
-<button class="good" onclick="answer(true)">✅ Bonne</button>
-<button class="bad" onclick="answer(false)">❌ Mauvaise</button>
-</div>
+  <!-- CARD -->
+  <div id="card" onclick="flip()">
+    <div id="inner">
+      <div class="face front" id="front"></div>
+      <div class="face back" id="back"></div>
+    </div>
+  </div>
 
-<div id="counter" style="position:absolute;top:85%;left:50%;transform:translateX(-50%);z-index:1;"></div>
+  <!-- QUIZ -->
+  <div id="quiz">
+    <button class="good" onclick="answer(true)">✅ Bonne</button>
+    <button class="bad" onclick="answer(false)">❌ Mauvaise</button>
+  </div>
+
 </div>
 
 <script>
-// Mot de passe
+/* ===== LOGIN ===== */
 const PASS="militaire123";
-function loginUser(){if(pwd.value===PASS){loginBox.style.display="none";app.classList.remove("hidden");}else{err.textContent="Mot de passe incorrect";}}
+function login(){
+  if(pwd.value===PASS){
+    loginOverlay.style.display="none";
+    app.style.display="block";
+    buildCountries();
+    start();
+  }else{
+    err.textContent="Mot de passe incorrect";
+  }
+}
 
-// 50 cartes exemple
+/* ===== CARTES (exemple, tu peux en remettre 50) ===== */
 const cards=[
-{id:1,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/7/79/M1_Abrams_tank.jpg",t:"M1 Abrams"},
-{id:2,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/2/28/Bradley_Fighting_Vehicle.jpg",t:"M2 Bradley"},
-{id:3,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/0/02/M2_Machinegun_Bradley.jpg",t:"Bradley mitrailleuse"},
-{id:4,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/f/f9/Stryker_ICV.jpg",t:"Stryker ICV"},
-{id:5,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/1/10/US_M113.jpg",t:"M113 APC"},
-{id:6,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/c/cc/M109_Howitzer.jpg",t:"M109 Howitzer"},
-{id:7,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/2/24/M998_Humvee.jpg",t:"HMMWV"},
-{id:8,c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/3/3d/M1126_Stryker.jpg",t:"Stryker M1126"},
-{id:9,c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/3/33/Leclerc_main_battle_tank.jpg",t:"Leclerc"},
-{id:10,c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/4/44/VAB_vehicle.jpg",t:"VAB"},
-{id:11,c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/0/0f/AMX-10RC_1.jpg",t:"AMX-10RC"},
-{id:12,c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/5/5a/GCT_155mm.jpg",t:"GCT 155mm"},
-{id:13,c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/2/25/VBL.jpg",t:"VBL"},
-{id:14,c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/4/48/CAESAR_self-propelled_howitzer.jpg",t:"CAESAR"},
-{id:15,c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/2/21/T-90_1.jpg",t:"T-90"},
-{id:16,c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/6/6a/BMP-3.jpg",t:"BMP-3"},
-{id:17,c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/4/4f/T-14_Armata.jpg",t:"T-14 Armata"},
-{id:18,c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/c/cd/BTR-80.jpg",t:"BTR-80"},
-{id:19,c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/3/3d/2S19_Msta.jpg",t:"2S19 Msta"},
-{id:20,c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/6/63/BMD-4.jpg",t:"BMD-4"},
-{id:21,c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/7/7d/Leopard_2A6M.jpg",t:"Leopard 2"},
-{id:22,c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/e/e0/Marder_IFV.jpg",t:"Marder IFV"},
-{id:23,c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/b/bf/PzH_2000.jpg",t:"PzH 2000"},
-{id:24,c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/1/11/TPz_Fuchs_2.jpg",t:"TPz Fuchs 2"},
-{id:25,c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/2/29/Boxer_MRAV.jpg",t:"Boxer MRAV"},
-{id:26,c:"Chine",i:"https://upload.wikimedia.org/wikipedia/commons/8/85/Type_99.jpg",t:"Type 99"},
-{id:27,c:"Chine",i:"https://upload.wikimedia.org/wikipedia/commons/5/5f/ZBD-04.jpg",t:"ZBD-04"},
-{id:28,c:"Chine",i:"https://upload.wikimedia.org/wikipedia/commons/1/1c/PLZ-05.jpg",t:"PLZ-05"},
-{id:29,c:"Chine",i:"https://upload.wikimedia.org/wikipedia/commons/b/b7/Huolongchushou_IFV.jpg",t:"Type 89 IFV"},
-{id:30,c:"Chine",i:"https://upload.wikimedia.org/wikipedia/commons/0/08/Type_99_Arty.jpg",t:"Type 99 Artillerie"},
-{id:31,c:"Japon",i:"https://upload.wikimedia.org/wikipedia/commons/f/f0/Type_89_IFV.jpg",t:"Type 89 IFV"},
-{id:32,c:"Japon",i:"https://upload.wikimedia.org/wikipedia/commons/0/0a/NH90_Japan.jpg",t:"NH90 Helicopter"},
-{id:33,c:"Japon",i:"https://upload.wikimedia.org/wikipedia/commons/6/63/Type_10_Japan.jpg",t:"Type 10"},
-{id:34,c:"Japon",i:"https://upload.wikimedia.org/wikipedia/commons/2/24/Type_90_main_battle_tank.jpg",t:"Type 90 MBT"},
-{id:35,c:"Japon",i:"https://upload.wikimedia.org/wikipedia/commons/f/f1/Type_96_IFV.jpg",t:"Type 96 IFV"},
-{id:36,c:"Israël",i:"https://upload.wikimedia.org/wikipedia/commons/f/f4/Merkava_4.jpg",t:"Merkava 4"},
-{id:37,c:"Israël",i:"https://upload.wikimedia.org/wikipedia/commons/2/27/Namer_APC.jpg",t:"Namer APC"},
-{id:38,c:"Israël",i:"https://upload.wikimedia.org/wikipedia/commons/f/f6/Achzarit_APC.jpg",t:"Achzarit APC"},
-{id:39,c:"Israël",i:"https://upload.wikimedia.org/wikipedia/commons/5/5e/Gil_Mer_Vehicle.jpg",t:"Gil Mer"},
-{id:40,c:"Israël",i:"https://upload.wikimedia.org/wikipedia/commons/4/45/IDF_Shot_2014.jpg",t:"IDF Armored"},
-{id:41,c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/8/82/Challenger_2_Tank.jpg",t:"Challenger 2"},
-{id:42,c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/f/fc/Warrior_IFV.jpg",t:"Warrior IFV"},
-{id:43,c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Ajax_ARM.jpg",t:"Ajax ARM"},
-{id:44,c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/7/79/Stormer_Hybrid.jpg",t:"Stormer"},
-{id:45,c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/3/3d/L118_Howitzer.jpg",t:"L118 Howitzer"},
-{id:46,c:"Italie",i:"https://upload.wikimedia.org/wikipedia/commons/5/57/Ariete_MB.jpg",t:"Ariete MBT"},
-{id:47,c:"Italie",i:"https://upload.wikimedia.org/wikipedia/commons/0/01/Dardo_IFV.jpg",t:"Dardo IFV"},
-{id:48,c:"Italie",i:"https://upload.wikimedia.org/wikipedia/commons/1/1b/PzH_2000_Italy.jpg",t:"PzH 2000"},
-{id:49,c:"Italie",i:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Fennek_IT.jpg",t:"Fennek"},
-{id:50,c:"Italie",i:"https://upload.wikimedia.org/wikipedia/commons/2/22/Bersagliere_APC.jpg",t:"Bersagliere APC"}
+{c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/7/79/M1_Abrams_tank.jpg",t:"M1 Abrams"},
+{c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/3/33/Leclerc_main_battle_tank.jpg",t:"Leclerc"},
+{c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/2/21/T-90_1.jpg",t:"T-90"},
+{c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/7/7d/Leopard_2A6M.jpg",t:"Leopard 2"},
+{c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/8/82/Challenger_2_Tank.jpg",t:"Challenger 2"}
 ];
 
-const stats=JSON.parse(localStorage.stats||"{}");
-cards.forEach(c=>stats[c.id]??={b:1});
-localStorage.stats=JSON.stringify(stats);
-
-// Menu pays
-const menu=document.getElementById("menu");
-const countryBtn=document.getElementById("countryBtn");
-countryBtn.onclick=e=>{e.stopPropagation();menu.classList.toggle("show");}
-document.addEventListener("click",e=>{if(!menu.contains(e.target))menu.classList.remove("show");});
+/* ===== MENU PAYS ===== */
+const menu=document.getElementById("countryMenu");
 const countryList=document.getElementById("countryList");
-[...new Set(cards.map(c=>c.c))].forEach(p=>{countryList.innerHTML+=`<label><input type="checkbox" checked value="${p}"> ${p}</label><br>`;});
-function filterCountries(v){[...countryList.children].forEach(l=>{l.style.display=l.textContent.toLowerCase().includes(v.toLowerCase())?"block":"none";});}
 
-// Jeu
-let deck=[],index=0;
-const card=document.getElementById("card");
+function buildCountries(){
+  countryList.innerHTML="";
+  [...new Set(cards.map(c=>c.c))].forEach(p=>{
+    countryList.innerHTML+=`
+      <label>
+        <input type="checkbox" checked value="${p}">
+        ${p}
+      </label>
+    `;
+  });
+}
+
+function toggleMenu(){
+  menu.style.display = menu.style.display==="block" ? "none" : "block";
+}
+document.addEventListener("click",e=>{
+  if(!menu.contains(e.target) && !e.target.closest(".top")){
+    menu.style.display="none";
+  }
+});
+function filterCountries(v){
+  [...countryList.children].forEach(l=>{
+    l.style.display = l.textContent.toLowerCase().includes(v.toLowerCase()) ? "block":"none";
+  });
+}
+
+/* ===== JEU ===== */
+let deck=[],i=0;
 const front=document.getElementById("front");
 const back=document.getElementById("back");
 const quiz=document.getElementById("quiz");
-const counter=document.getElementById("counter");
+const card=document.getElementById("card");
 
 function start(){
-const sel=[...document.querySelectorAll("#countryList input:checked")].map(c=>c.value);
-if(sel.length===0){alert("Sélectionne au moins un pays");return;}
-deck=[];
-cards.filter(c=>sel.includes(c.c)).forEach(c=>{for(let n=0;n<4-stats[c.id].b;n++)deck.push(c);});
-deck.sort(()=>Math.random()-0.5);
-index=0; show();
+  const sel=[...document.querySelectorAll("#countryList input:checked")].map(x=>x.value);
+  if(sel.length===0){
+    alert("Sélectionne au moins un pays");
+    return;
+  }
+  deck=cards.filter(c=>sel.includes(c.c)).sort(()=>Math.random()-0.5);
+  i=0;
+  show();
 }
 
 function show(){
-const c=deck[index%deck.length];
-front.innerHTML=`<img src="${c.i}">`;
-back.textContent=c.t;
-counter.textContent=`Carte ${index+1}/${deck.length}`;
-card.classList.remove("flip");
-quiz.classList.remove("show");
-card.style.opacity=0; card.style.transform="translate(-50%,-50%) scale(0.95)";
-setTimeout(()=>{card.style.opacity=1; card.style.transform="translate(-50%,-50%) scale(1)";},50);
+  if(deck.length===0) return;
+  const c=deck[i%deck.length];
+  front.innerHTML=`<img src="${c.i}">`;
+  back.textContent=c.t;
+  card.classList.remove("flip");
+  quiz.classList.remove("show");
 }
 
-function flip(){card.classList.toggle("flip"); quiz.classList.toggle("show");}
-function answer(ok){const c=deck[index%deck.length]; stats[c.id].b=ok?Math.min(3,stats[c.id].b+1):1; localStorage.stats=JSON.stringify(stats); index++; show();}
-function fullscreen(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+function flip(){
+  card.classList.toggle("flip");
+  quiz.classList.toggle("show");
+}
+
+function answer(){
+  i++;
+  show();
+}
 </script>
+
 </body>
 </html>
