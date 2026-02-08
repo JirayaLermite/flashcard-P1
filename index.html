@@ -317,6 +317,16 @@ function next(){
   index++;
   showCard();
 }
+  function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(err=>{
+      alert(`Erreur plein écran : ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
+
 </script>
 
 </body>
