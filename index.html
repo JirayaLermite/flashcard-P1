@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Flashcards Véhicules Militaires</title>
-
 <style>
 :root{
   --blue:#1976d2;
@@ -12,9 +11,7 @@
   --bg2:#203a43;
   --bg3:#2c5364;
 }
-
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto;
@@ -106,28 +103,18 @@ button{
   z-index:4000;
 }
 #countryMenu input{
-  width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  border-radius:10px;
-  border:1px solid #ccc;
-}
-#countryMenu label{
-  display:flex;            
-  align-items:center;      
-  justify-content:space-between; 
-  padding:6px;
-  font-size:15px;
-  cursor:pointer;           
-  user-select:none;
-}
-#countryMenu input[type="checkbox"]{
-  flex-shrink:0;           
   width:18px;
   height:18px;
 }
-
-
+#countryMenu label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:6px;
+  font-size:15px;
+  cursor:pointer;
+  user-select:none;
+}
 
 /* ===== CARD ===== */
 #card{
@@ -195,7 +182,6 @@ button{
 .bad{background:#e53935}
 </style>
 </head>
-
 <body>
 
 <!-- LOGIN -->
@@ -210,12 +196,10 @@ button{
 
 <!-- APP -->
 <div id="app">
-
   <div class="top">
     <button onclick="toggleMenu()">🌍 Pays</button>
     <button onclick="restart()">🔀 Mélanger</button>
     <button onclick="toggleFullscreen()">🖥️ Plein écran</button>
-
   </div>
 
   <div id="countryMenu">
@@ -234,14 +218,13 @@ button{
     <button class="good" onclick="next()">✅</button>
     <button class="bad" onclick="next()">❌</button>
   </div>
-
 </div>
 
 <script>
 /* ===== CONFIG ===== */
 const PASSWORD="militaire123";
 
-/* ===== DONNÉES (exemples – tu peux en mettre 50+) ===== */
+/* ===== DONNÉES (exemple 5 cartes – tu peux ajouter 50+) ===== */
 const cards=[
  {c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/7/79/M1_Abrams_tank.jpg",t:"M1 Abrams"},
  {c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/3/33/Leclerc_main_battle_tank.jpg",t:"Leclerc"},
@@ -275,9 +258,7 @@ function buildCountries(){
   const list=document.getElementById("countryList");
   list.innerHTML="";
   [...new Set(cards.map(c=>c.c))].forEach(p=>{
-    list.innerHTML+=`
-      <label><input type="checkbox" checked value="${p}"> ${p}</label>
-    `;
+    list.innerHTML+=`<label><span>${p}</span><input type="checkbox" checked value="${p}"></label>`;
   });
 }
 function toggleMenu(){
@@ -317,7 +298,9 @@ function next(){
   index++;
   showCard();
 }
-  function toggleFullscreen(){
+
+/* ===== PLEIN ÉCRAN ===== */
+function toggleFullscreen(){
   if(!document.fullscreenElement){
     document.documentElement.requestFullscreen().catch(err=>{
       alert(`Erreur plein écran : ${err.message}`);
@@ -326,9 +309,6 @@ function next(){
     document.exitFullscreen();
   }
 }
-
 </script>
-
 </body>
 </html>
-
