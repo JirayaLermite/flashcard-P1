@@ -2,177 +2,185 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Flashcards Véhicules Militaires</title>
 
 <style>
-*{box-sizing:border-box}
+:root{
+  --blue:#1976d2;
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --bg3:#2c5364;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
 body{
-margin:0;
-font-family:system-ui,Segoe UI;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-height:100vh;
-overflow:hidden;
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+  color:white;
+  height:100vh;
+  overflow:hidden;
 }
 
 /* ===== LOGIN ===== */
 #loginOverlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.85);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:10000;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
 }
 #loginBox{
-background:white;
-color:black;
-padding:30px;
-border-radius:20px;
-width:90%;
-max-width:320px;
-text-align:center;
+  background:white;
+  color:black;
+  padding:24px;
+  border-radius:18px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
 }
+#loginBox h2{margin-top:0}
 #loginBox input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border-radius:10px;
-border:1px solid #ccc;
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  border-radius:12px;
+  border:1px solid #ccc;
 }
 #loginBox button{
-margin-top:15px;
-padding:12px;
-width:100%;
-border:none;
-border-radius:12px;
-background:#1e88e5;
-color:white;
-font-weight:bold;
-cursor:pointer;
+  margin-top:14px;
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  border:none;
+  border-radius:14px;
+  background:var(--blue);
+  color:white;
+  font-weight:bold;
 }
 
 /* ===== APP ===== */
-#app{
-display:none;
-}
+#app{display:none;height:100vh}
 
 /* ===== TOP BAR ===== */
 .top{
-position:fixed;
-top:10px;
-left:50%;
-transform:translateX(-50%);
-display:flex;
-gap:10px;
-z-index:3000;
+  position:fixed;
+  top:env(safe-area-inset-top,10px);
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+  z-index:3000;
 }
 button{
-border:none;
-border-radius:14px;
-padding:12px 18px;
-font-weight:bold;
-cursor:pointer;
-color:white;
-background:#1e88e5;
-box-shadow:0 6px 20px rgba(0,0,0,.4);
+  border:none;
+  border-radius:14px;
+  padding:14px 18px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  color:white;
+  background:var(--blue);
+  box-shadow:0 8px 20px rgba(0,0,0,.4);
 }
 
 /* ===== MENU PAYS ===== */
 #countryMenu{
-position:fixed;
-top:70px;
-left:50%;
-transform:translateX(-50%);
-background:white;
-color:black;
-width:280px;
-max-height:60vh;
-overflow-y:auto;
-border-radius:16px;
-padding:12px;
-display:none;
-z-index:4000;
-box-shadow:0 15px 40px rgba(0,0,0,.6);
+  position:fixed;
+  top:70px;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  color:black;
+  width:90%;
+  max-width:320px;
+  max-height:65vh;
+  overflow-y:auto;
+  border-radius:18px;
+  padding:12px;
+  display:none;
+  z-index:4000;
 }
 #countryMenu input{
-width:100%;
-padding:8px;
-margin-bottom:10px;
-border-radius:8px;
-border:1px solid #ccc;
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
 }
 #countryMenu label{
-display:block;
-padding:6px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px;
+  font-size:15px;
 }
 
 /* ===== CARD ===== */
 #card{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:92vw;
-max-width:900px;
-height:72vh;
-max-height:560px;
-perspective:1200px;
-cursor:pointer;
-z-index:1;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:92vw;
+  max-width:480px;
+  height:60vh;
+  max-height:520px;
+  perspective:1200px;
+  cursor:pointer;
 }
 #inner{
-width:100%;
-height:100%;
-background:white;
-border-radius:22px;
-transform-style:preserve-3d;
-transition:.8s;
-box-shadow:0 20px 50px rgba(0,0,0,.6);
+  width:100%;
+  height:100%;
+  background:white;
+  border-radius:22px;
+  transform-style:preserve-3d;
+  transition:transform .6s;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
 }
 #card.flip #inner{transform:rotateY(180deg)}
 .face{
-position:absolute;
-width:100%;
-height:100%;
-backface-visibility:hidden;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:22px;
-padding:12px;
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:22px;
+  padding:10px;
 }
 .front img{
-width:100%;
-height:100%;
-object-fit:contain;
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
 .back{
-transform:rotateY(180deg);
-color:#0d47a1;
-font-size:clamp(24px,5vw,48px);
-font-weight:bold;
-text-align:center;
+  transform:rotateY(180deg);
+  color:#0d47a1;
+  font-size:clamp(22px,6vw,36px);
+  font-weight:800;
+  text-align:center;
 }
 
-/* ===== QUIZ BUTTONS ===== */
+/* ===== QUIZ ===== */
 #quiz{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-display:flex;
-gap:12px;
-opacity:0;
-pointer-events:none;
-transition:.3s;
-z-index:2500;
+  position:fixed;
+  bottom:env(safe-area-inset-bottom,20px);
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:14px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
 }
 #quiz.show{
-opacity:1;
-pointer-events:auto;
+  opacity:1;
+  pointer-events:auto;
 }
 .good{background:#43a047}
 .bad{background:#e53935}
@@ -185,133 +193,121 @@ pointer-events:auto;
 <div id="loginOverlay">
   <div id="loginBox">
     <h2>🔒 Accès</h2>
-    <input type="password" id="pwd" placeholder="Mot de passe">
+    <input id="pwd" type="password" placeholder="Mot de passe">
     <button onclick="login()">Entrer</button>
-    <p id="err" style="color:red"></p>
+    <p id="err" style="color:red;margin:8px 0 0"></p>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
 
-  <!-- TOP -->
   <div class="top">
     <button onclick="toggleMenu()">🌍 Pays</button>
-    <button onclick="start()">▶️ Démarrer</button>
+    <button onclick="restart()">🔀 Mélanger</button>
   </div>
 
-  <!-- MENU -->
   <div id="countryMenu">
     <input placeholder="Rechercher..." oninput="filterCountries(this.value)">
     <div id="countryList"></div>
   </div>
 
-  <!-- CARD -->
-  <div id="card" onclick="flip()">
+  <div id="card" onclick="flipCard()">
     <div id="inner">
       <div class="face front" id="front"></div>
       <div class="face back" id="back"></div>
     </div>
   </div>
 
-  <!-- QUIZ -->
   <div id="quiz">
-    <button class="good" onclick="answer(true)">✅ Bonne</button>
-    <button class="bad" onclick="answer(false)">❌ Mauvaise</button>
+    <button class="good" onclick="next()">✅</button>
+    <button class="bad" onclick="next()">❌</button>
   </div>
 
 </div>
 
 <script>
+/* ===== CONFIG ===== */
+const PASSWORD="militaire123";
+
+/* ===== DONNÉES (exemples – tu peux en mettre 50+) ===== */
+const cards=[
+ {c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/7/79/M1_Abrams_tank.jpg",t:"M1 Abrams"},
+ {c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/3/33/Leclerc_main_battle_tank.jpg",t:"Leclerc"},
+ {c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/2/21/T-90_1.jpg",t:"T-90"},
+ {c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/7/7d/Leopard_2A6M.jpg",t:"Leopard 2"},
+ {c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/8/82/Challenger_2_Tank.jpg",t:"Challenger 2"}
+];
+
+/* ===== ÉTAT ===== */
+let deck=[],index=0;
+
 /* ===== LOGIN ===== */
-const PASS="militaire123";
 function login(){
-  if(pwd.value===PASS){
+  if(pwd.value===PASSWORD){
     loginOverlay.style.display="none";
     app.style.display="block";
-    buildCountries();
-    start();
+    init();
   }else{
     err.textContent="Mot de passe incorrect";
   }
 }
 
-/* ===== CARTES (exemple, tu peux en remettre 50) ===== */
-const cards=[
-{c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/7/79/M1_Abrams_tank.jpg",t:"M1 Abrams"},
-{c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/3/33/Leclerc_main_battle_tank.jpg",t:"Leclerc"},
-{c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/2/21/T-90_1.jpg",t:"T-90"},
-{c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/7/7d/Leopard_2A6M.jpg",t:"Leopard 2"},
-{c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/8/82/Challenger_2_Tank.jpg",t:"Challenger 2"}
-];
+/* ===== INIT ===== */
+function init(){
+  buildCountries();
+  restart();
+}
 
-/* ===== MENU PAYS ===== */
-const menu=document.getElementById("countryMenu");
-const countryList=document.getElementById("countryList");
-
+/* ===== MENU ===== */
 function buildCountries(){
-  countryList.innerHTML="";
+  const list=document.getElementById("countryList");
+  list.innerHTML="";
   [...new Set(cards.map(c=>c.c))].forEach(p=>{
-    countryList.innerHTML+=`
-      <label>
-        <input type="checkbox" checked value="${p}">
-        ${p}
-      </label>
+    list.innerHTML+=`
+      <label><input type="checkbox" checked value="${p}"> ${p}</label>
     `;
   });
 }
-
 function toggleMenu(){
-  menu.style.display = menu.style.display==="block" ? "none" : "block";
+  countryMenu.style.display = countryMenu.style.display==="block"?"none":"block";
 }
 document.addEventListener("click",e=>{
-  if(!menu.contains(e.target) && !e.target.closest(".top")){
-    menu.style.display="none";
+  if(!countryMenu.contains(e.target) && !e.target.closest(".top")){
+    countryMenu.style.display="none";
   }
 });
 function filterCountries(v){
   [...countryList.children].forEach(l=>{
-    l.style.display = l.textContent.toLowerCase().includes(v.toLowerCase()) ? "block":"none";
+    l.style.display=l.textContent.toLowerCase().includes(v.toLowerCase())?"flex":"none";
   });
 }
 
 /* ===== JEU ===== */
-let deck=[],i=0;
-const front=document.getElementById("front");
-const back=document.getElementById("back");
-const quiz=document.getElementById("quiz");
-const card=document.getElementById("card");
-
-function start(){
-  const sel=[...document.querySelectorAll("#countryList input:checked")].map(x=>x.value);
-  if(sel.length===0){
-    alert("Sélectionne au moins un pays");
-    return;
-  }
-  deck=cards.filter(c=>sel.includes(c.c)).sort(()=>Math.random()-0.5);
-  i=0;
-  show();
+function restart(){
+  const selected=[...document.querySelectorAll("#countryList input:checked")].map(x=>x.value);
+  deck=cards.filter(c=>selected.includes(c.c)).sort(()=>Math.random()-0.5);
+  index=0;
+  showCard();
 }
-
-function show(){
+function showCard(){
   if(deck.length===0) return;
-  const c=deck[i%deck.length];
+  const c=deck[index%deck.length];
   front.innerHTML=`<img src="${c.i}">`;
   back.textContent=c.t;
   card.classList.remove("flip");
   quiz.classList.remove("show");
 }
-
-function flip(){
+function flipCard(){
   card.classList.toggle("flip");
   quiz.classList.toggle("show");
 }
-
-function answer(){
-  i++;
-  show();
+function next(){
+  index++;
+  showCard();
 }
 </script>
 
 </body>
 </html>
+
