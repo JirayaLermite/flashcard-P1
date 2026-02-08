@@ -164,19 +164,23 @@ button{
 
 /* ===== QUIZ ===== */
 #quiz{
-  position:fixed;
-  bottom:env(safe-area-inset-bottom,20px);
+  position:absolute;
+  top:calc(50% + 32vh);
   left:50%;
   transform:translateX(-50%);
   display:flex;
-  gap:14px;
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
+  gap:20px;
+  z-index:5000;
 }
-#quiz.show{
-  opacity:1;
-  pointer-events:auto;
+#quiz button{
+  padding:18px 28px;
+  font-size:18px;
+  border-radius:16px;
+  font-weight:bold;
+  cursor:pointer;
+  color:white;
+  border:none;
+  box-shadow:0 8px 20px rgba(0,0,0,.4);
 }
 .good{background:#43a047}
 .bad{background:#e53935}
@@ -221,22 +225,28 @@ button{
 </div>
 
 <script>
-/* ===== CONFIG ===== */
+// ===== CONFIG =====
 const PASSWORD="militaire123";
 
-/* ===== DONNÉES (exemple 5 cartes – tu peux ajouter 50+) ===== */
+// ===== 50 VEHICULES =====
 const cards=[
  {c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/7/79/M1_Abrams_tank.jpg",t:"M1 Abrams"},
  {c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/3/33/Leclerc_main_battle_tank.jpg",t:"Leclerc"},
  {c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/2/21/T-90_1.jpg",t:"T-90"},
  {c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/7/7d/Leopard_2A6M.jpg",t:"Leopard 2"},
- {c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/8/82/Challenger_2_Tank.jpg",t:"Challenger 2"}
+ {c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/8/82/Challenger_2_Tank.jpg",t:"Challenger 2"},
+ {c:"USA",i:"https://upload.wikimedia.org/wikipedia/commons/0/04/M2_Bradley.jpg",t:"M2 Bradley"},
+ {c:"France",i:"https://upload.wikimedia.org/wikipedia/commons/6/6d/VBCI_France.jpg",t:"VBCI"},
+ {c:"Russie",i:"https://upload.wikimedia.org/wikipedia/commons/1/11/BMP-2_Russia.jpg",t:"BMP-2"},
+ {c:"Allemagne",i:"https://upload.wikimedia.org/wikipedia/commons/4/49/Leopard_1A5.jpg",t:"Leopard 1"},
+ {c:"UK",i:"https://upload.wikimedia.org/wikipedia/commons/3/36/Warrior_IFV.jpg",t:"Warrior"},
+ // … continue jusqu’à 50 cartes (remplacer par tes images)
 ];
 
-/* ===== ÉTAT ===== */
+// ===== ÉTAT =====
 let deck=[],index=0;
 
-/* ===== LOGIN ===== */
+// ===== LOGIN =====
 function login(){
   if(pwd.value===PASSWORD){
     loginOverlay.style.display="none";
@@ -247,18 +257,18 @@ function login(){
   }
 }
 
-/* ===== INIT ===== */
+// ===== INIT =====
 function init(){
   buildCountries();
   restart();
 }
 
-/* ===== MENU ===== */
+// ===== MENU =====
 function buildCountries(){
   const list=document.getElementById("countryList");
   list.innerHTML="";
   [...new Set(cards.map(c=>c.c))].forEach(p=>{
-    list.innerHTML+=`<label><span>${p}</span><input type="checkbox" checked value="${p}"></label>`;
+    list.innerHTML=`${list.innerHTML}<label><span>${p}</span><input type="checkbox" checked value="${p}"></label>`;
   });
 }
 function toggleMenu(){
@@ -275,7 +285,7 @@ function filterCountries(v){
   });
 }
 
-/* ===== JEU ===== */
+// ===== JEU =====
 function restart(){
   const selected=[...document.querySelectorAll("#countryList input:checked")].map(x=>x.value);
   deck=cards.filter(c=>selected.includes(c.c)).sort(()=>Math.random()-0.5);
@@ -284,27 +294,24 @@ function restart(){
 }
 function showCard(){
   if(deck.length===0) return;
-  const c=deck[index%deck.length];
-  front.innerHTML=`<img src="${c.i}">`;
-  back.textContent=c.t;
-  card.classList.remove("flip");
-  quiz.classList.remove("show");
+  const c = deck[index % deck.length];
+  card.classList.remove("flip");        // reset recto
+  back.textContent = "";                 // vide le back
+  front.innerHTML = `<img src="${c.i}">`;
+  setTimeout(()=>{back.textContent = c.t;},100); // back après delay pour éviter affichage prématuré
 }
 function flipCard(){
   card.classList.toggle("flip");
-  quiz.classList.toggle("show");
 }
 function next(){
   index++;
   showCard();
 }
 
-/* ===== PLEIN ÉCRAN ===== */
+// ===== PLEIN ÉCRAN =====
 function toggleFullscreen(){
   if(!document.fullscreenElement){
-    document.documentElement.requestFullscreen().catch(err=>{
-      alert(`Erreur plein écran : ${err.message}`);
-    });
+    document.documentElement.requestFullscreen().catch(err=>{alert(`Erreur: ${err.message}`);});
   } else {
     document.exitFullscreen();
   }
