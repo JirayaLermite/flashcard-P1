@@ -67,15 +67,15 @@ header button:hover{ transform: scale(1.05); }
 }
 #menu input[type="checkbox"] { transform: scale(1.3); }
 
-/* CARTE - taille fixe mais centrée et responsive */
+/* CARTE - portrait */
 .card-container {
   flex:1; display:flex; justify-content:center; align-items:center; width:100%;
 }
 .card {
-  width:400px;
+  width:280px;       /* plus étroit */
   max-width:90vw;
-  height:280px;
-  max-height:60vh;
+  height:400px;      /* plus haut que large */
+  max-height:80vh;
   perspective:1200px;
 }
 .inner {
@@ -107,7 +107,7 @@ header button:hover{ transform: scale(1.05); }
 #controls button:hover{ transform:scale(1.05); }
 
 @media (max-width:600px){
-  .card{width:90vw; height:55vw;}
+  .card{width:70vw; height:100vw;}
   .back{font-size:20px;}
 }
 </style>
