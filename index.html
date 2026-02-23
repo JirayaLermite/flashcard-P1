@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Flashcards Véhicules</title>
 
-<!-- POLICE MODERNE -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
@@ -18,7 +17,7 @@ body {
   overflow-x:hidden;
 }
 
-/* OVERLAY MOT DE PASSE */
+/* MOT DE PASSE */
 #password-overlay {
   position: fixed;
   top:0; left:0;
@@ -36,6 +35,8 @@ body {
   border-radius:10px;
   border:none;
   margin-top:12px;
+  width:80%;
+  max-width:300px;
 }
 #password-overlay button {
   margin-top:20px;
@@ -57,31 +58,29 @@ header {
   top: 0;
   z-index: 10;
   display: flex;
-  justify-content: center; /* centre horizontalement */
+  justify-content: center;
   align-items: center;
-  flex-wrap: nowrap;       /* empêcher les boutons de passer à la ligne */
+  flex-wrap: nowrap;
   background: rgba(2,6,23,0.9);
   padding: 12px 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  overflow-x: auto;        /* défilement si l'écran est petit */
-  gap: 10px;               /* espace entre les boutons */
+  overflow-x: auto;
+  gap: 10px;
 }
-
 header button {
   border: none;
   border-radius: 15px;
-  padding: 14px 24px;
+  padding: 12px 20px;
   font-weight: bold;
   cursor: pointer;
   font-size: 16px;
   color: #fff;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   flex-shrink: 0;
 }
 header button:hover { transform: translateY(-2px) scale(1.05); }
 header button:active { transform: translateY(1px) scale(0.98); }
-
 header button:first-child { background: linear-gradient(45deg,#7c3aed,#9333ea); }
 header button.start { background: linear-gradient(45deg,#0284c7,#0ea5e9); }
 header button.fullscreen-btn { background: linear-gradient(45deg,#f59e0b,#facc15); color:#000; }
@@ -90,13 +89,14 @@ header button.fullscreen-btn { background: linear-gradient(45deg,#f59e0b,#facc15
 #menu {
   position: absolute;
   top:70px;
-  left:20px;
+  left:10px;
+  right:10px;
   background: rgba(2,6,23,0.95);
   border-radius: 12px;
   padding: 12px;
   display:none;
   box-shadow:0 4px 12px rgba(0,0,0,0.6);
-  max-height: 60vh;
+  max-height: 50vh;
   overflow-y: auto;
 }
 #menu label {
@@ -111,8 +111,9 @@ header button.fullscreen-btn { background: linear-gradient(45deg,#f59e0b,#facc15
 .card {
   width:90vw;
   max-width:480px;
-  height:70vh;
-  margin:25px auto;
+  height:60vw;
+  max-height:480px;
+  margin:20px auto;
   perspective:1200px;
   cursor:pointer;
 }
@@ -141,54 +142,56 @@ header button.fullscreen-btn { background: linear-gradient(45deg,#f59e0b,#facc15
 .face img {
   width:100%;
   height:100%;
-  object-fit:contain; /* toute l'image visible */
+  object-fit:contain; /* image totalement visible */
   border-radius:20px;
 }
 .back {
   transform: rotateY(180deg);
-  font-size:32px;
+  font-size:24px;
   font-weight:bold;
   display:flex;
   align-items:center;
   justify-content:center;
+  padding:10px;
 }
 
 /* CONTROLS */
 #controls {
   display:flex;
   justify-content:center;
-  gap:20px;
+  gap:15px;
   flex-wrap:wrap;
-  margin:20px 0;
+  margin:15px 0 30px;
 }
 #controls button {
-  min-width:150px;
-  font-size:20px;
+  min-width:120px;
+  font-size:18px;
   font-weight:bold;
   border-radius:16px;
-  padding:14px 20px;
-  box-shadow:0 6px 15px rgba(0,0,0,0.5);
+  padding:12px 16px;
+  box-shadow:0 6px 12px rgba(0,0,0,0.5);
   cursor:pointer;
   transition:all 0.3s;
   text-transform:uppercase;
 }
 #controls button:hover {
   transform:scale(1.1) rotate(-1deg);
-  box-shadow:0 8px 18px rgba(0,0,0,0.6);
+  box-shadow:0 8px 15px rgba(0,0,0,0.6);
 }
 #controls button:active {
   transform:scale(0.95);
-  box-shadow:0 4px 10px rgba(0,0,0,0.4);
+  box-shadow:0 4px 8px rgba(0,0,0,0.4);
 }
 #controls .good { background: linear-gradient(45deg,#16a34a,#22c55e); border:2px solid #fff; }
 #controls .bad { background: linear-gradient(45deg,#dc2626,#ef4444); border:2px solid #fff; }
 
+/* MEDIA MOBILE */
 @media (max-width:500px){
-  .card{height:60vh;}
-  .back{font-size:24px;}
-  /* plus de colonne sur mobile */
+  .card{width:95vw; height:65vw;}
+  .back{font-size:20px;}
   header{flex-direction:row; justify-content:center;}
-  #controls button{min-width:120px; font-size:18px;}
+  #controls button{min-width:100px; font-size:16px; padding:10px 14px;}
+  #password-overlay input{width:90%;}
 }
 </style>
 </head>
@@ -282,7 +285,6 @@ function loadCard(){
 function start(){ started=true; loadCard(); }
 function flip(){ if(started) document.getElementById("inner").classList.toggle("flip"); }
 
-// BON/FAUX avec délai pour voir la réponse
 function good(){
   if(!document.getElementById("inner").classList.contains("flip")) flip();
   current.weight = Math.max(1,current.weight-1);
