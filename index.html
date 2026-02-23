@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -11,7 +12,7 @@ html, body {
   font-family:'Roboto',sans-serif;
   background-color:#0f172a;
   color:#fff;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 /* MOT DE PASSE */
@@ -69,9 +70,11 @@ header button:hover{ transform: scale(1.05); }
 
 /* CARTE */
 .card {
-  width:100%;
-  height:calc(100vh - 140px); /* header + controls */
-  margin-top:50px;
+  width:90vw; /* carte plus petite que l'écran */
+  max-width:480px;
+  height:60vw;
+  max-height:400px;
+  margin:90px auto 20px auto; /* centré avec marge top */
   perspective:1200px;
 }
 .inner {
@@ -90,10 +93,8 @@ header button:hover{ transform: scale(1.05); }
 
 /* CONTROLS */
 #controls {
-  position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:15px;
-  padding:10px; background: rgba(2,6,23,0.95);
-  box-shadow:0 -2px 10px rgba(0,0,0,0.5);
+  margin-bottom:20px;
 }
 #controls button{
   font-size:18px; font-weight:bold; border-radius:16px;
@@ -104,6 +105,10 @@ header button:hover{ transform: scale(1.05); }
 #controls .bad{ background: linear-gradient(45deg,#dc2626,#ef4444); border:2px solid #fff;}
 #controls button:hover{ transform:scale(1.05); }
 
+@media (max-width:600px){
+  .card{width:95vw; height:60vw;}
+  .back{font-size:22px;}
+}
 </style>
 </head>
 <body>
