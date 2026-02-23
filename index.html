@@ -48,33 +48,14 @@ header button.start{ background: linear-gradient(45deg,#0284c7,#0ea5e9);}
 header button.fullscreen-btn{ background: linear-gradient(45deg,#f59e0b,#facc15); color:#000; }
 header button:hover{ transform: scale(1.05); }
 
-/* MENU PAYS */
-#menu {
-  position:absolute;
-  top:60px; left:10px;
-  background: rgba(2,6,23,0.95);
-  border-radius:12px;
-  padding:12px;
-  display:none;
-  box-shadow:0 4px 12px rgba(0,0,0,0.6);
-  max-width:300px;
-  border:2px solid #fff;
-}
-#menu label {
-  display:flex; justify-content:space-between;
-  padding:6px 10px;
-  cursor:pointer;
-}
-#menu input[type="checkbox"] { transform: scale(1.3); }
-
-/* CARTE - portrait */
+/* CARTE - portrait et plus grande */
 .card-container {
-  flex:1; display:flex; justify-content:center; align-items:center; width:100%;
+  display:flex; justify-content:center; align-items:center; width:100%; margin-top:10px;
 }
 .card {
-  width:280px;       /* plus étroit */
+  width:320px;
   max-width:90vw;
-  height:400px;      /* plus haut que large */
+  height:480px;
   max-height:80vh;
   perspective:1200px;
 }
@@ -90,12 +71,35 @@ header button:hover{ transform: scale(1.05); }
   backface-visibility:hidden;
 }
 .face img { width:100%; height:100%; object-fit:contain; border-radius:20px; }
-.back { transform:rotateY(180deg); font-size:24px; font-weight:bold; text-align:center; padding:10px; display:flex; justify-content:center; align-items:center; }
+.back { transform:rotateY(180deg); font-size:26px; font-weight:bold; text-align:center; padding:10px; display:flex; justify-content:center; align-items:center; }
+
+/* MENU PAYS sous la carte */
+#menu {
+  background: rgba(2,6,23,0.95);
+  border-radius:12px;
+  padding:12px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  max-width:90vw;
+  border:2px solid #fff;
+  margin:10px 0;
+}
+#menu label {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:6px 10px;
+  cursor:pointer;
+  border-radius:8px;
+  background: rgba(15,23,42,0.7);
+}
+#menu input[type="checkbox"] { transform: scale(1.3); margin-left:6px; }
 
 /* CONTROLS */
 #controls {
   display:flex; justify-content:center; gap:15px;
-  padding:10px; background: rgba(2,6,23,0.95);
+  padding:10px;
+  margin-bottom:20px;
 }
 #controls button{
   font-size:18px; font-weight:bold; border-radius:16px;
@@ -107,8 +111,9 @@ header button:hover{ transform: scale(1.05); }
 #controls button:hover{ transform:scale(1.05); }
 
 @media (max-width:600px){
-  .card{width:70vw; height:100vw;}
-  .back{font-size:20px;}
+  .card{width:80vw; height:120vw;}
+  .back{font-size:22px;}
+  #menu{max-width:95vw;}
 }
 </style>
 </head>
@@ -126,8 +131,6 @@ header button:hover{ transform: scale(1.05); }
   <button class="fullscreen-btn" onclick="fullscreen()">⛶ Plein écran</button>
 </header>
 
-<div id="menu"></div>
-
 <div class="card-container">
   <div class="card" onclick="flip()">
     <div class="inner" id="inner">
@@ -136,6 +139,8 @@ header button:hover{ transform: scale(1.05); }
     </div>
   </div>
 </div>
+
+<div id="menu"></div>
 
 <div id="controls">
   <button class="bad" onclick="bad()">❌ Faux</button>
@@ -173,14 +178,34 @@ for(const country in vehicles){
 }
 
 const menu=document.getElementById("menu");
-Object.keys(vehicles).forEach(c=>{ menu.innerHTML+=`<label>${c}<input type="checkbox" checked value="${c}"></label>`; });
-function toggleMenu(){ menu.style.display = menu.style.display==="block"?"none":"block"; }
+Object.keys(vehicles).forEach(c=>{ 
+  const label=document.createElement("label");
+  label.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
+  menu.appendChild(label);
+});
+function toggleMenu(){ menu.style.display = menu.style.display==="flex"?"none":"flex"; }
 
 let current, started=false;
-function selectedCards(){ const selected=[...menu.querySelectorAll("input:checked")].map(i=>i.value); return cards.filter(c=>selected.includes(c.country)); }
-function randomCard(){ const pool=[]; selectedCards().forEach(c=>{for(let i=0;i<c.weight;i++) pool.push(c);}); return pool[Math.floor(Math.random()*pool.length)]; }
-function loadImage(card){ const img=document.getElementById("img"); img.src=card.imgJpg; img.onerror=()=>{ img.src=card.imgPng; }; }
-function loadCard(){ document.getElementById("inner").classList.remove("flip"); current=randomCard(); loadImage(current); setTimeout(()=>{document.getElementById("name").textContent=current.name;},120); }
+function selectedCards(){ 
+  const selected=[...menu.querySelectorAll("input:checked")].map(i=>i.value); 
+  return cards.filter(c=>selected.includes(c.country)); 
+}
+function randomCard(){ 
+  const pool=[];
+  selectedCards().forEach(c=>{for(let i=0;i<c.weight;i++) pool.push(c);}); 
+  return pool[Math.floor(Math.random()*pool.length)]; 
+}
+function loadImage(card){ 
+  const img=document.getElementById("img"); 
+  img.src=card.imgJpg; 
+  img.onerror=()=>{ img.src=card.imgPng; }; 
+}
+function loadCard(){ 
+  document.getElementById("inner").classList.remove("flip"); 
+  current=randomCard(); 
+  loadImage(current); 
+  setTimeout(()=>{document.getElementById("name").textContent=current.name;},120); 
+}
 function start(){ started=true; loadCard(); }
 function flip(){ if(started) document.getElementById("inner").classList.toggle("flip"); }
 function good(){ if(!document.getElementById("inner").classList.contains("flip")) flip(); current.weight=Math.max(1,current.weight-1); setTimeout(loadCard,700);}
