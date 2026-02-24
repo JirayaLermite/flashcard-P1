@@ -17,11 +17,14 @@ body{
   min-height:100vh;
 }
 
-/* PASSWORD */
+/* PASSWORD OVERLAY */
 #passwordOverlay{
-  position:fixed;inset:0;
+  position:fixed;
+  inset:0;
   background:rgba(2,6,23,.95);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   z-index:9999;
 }
 #passwordBox{
@@ -33,10 +36,22 @@ body{
   text-align:center;
   box-shadow:0 20px 60px rgba(0,0,0,.7);
 }
+#passwordBox h2{margin-top:0}
 #passwordBox input{
-  width:100%;padding:14px;border-radius:12px;border:none;margin:15px 0;
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  font-size:16px;
+  margin:15px 0;
 }
-#passwordBox button{width:100%;background:#2563eb;color:#fff;padding:14px}
+#passwordBox button{
+  width:100%;
+  background:#2563eb;
+  color:#fff;
+  font-size:16px;
+  padding:14px;
+}
 
 /* HEADER */
 header{
@@ -44,14 +59,23 @@ header{
   background:#020617;
   padding:12px;
   display:flex;
-  justify-content:center;
+  justify-content:space-between;
+  align-items:center;
   gap:10px;
   position:relative;
-  z-index:1000;
+  z-index:100;
+  flex-wrap:wrap;
 }
+header button{background:#2563eb;color:#fff}
+
+/* BUTTONS */
 button{
-  border:none;border-radius:14px;padding:12px 20px;
-  font-size:15px;cursor:pointer;color:#fff;transition:.15s;
+  border:none;
+  border-radius:14px;
+  padding:12px 20px;
+  font-size:15px;
+  cursor:pointer;
+  transition:.15s;
 }
 button:hover{transform:scale(1.05)}
 .start{background:#0284c7;font-weight:700}
@@ -60,15 +84,14 @@ button:hover{transform:scale(1.05)}
 #countryMenu{
   position:absolute;
   top:60px;
-  left:50%;
-  transform:translateX(-50%);
+  left:10px;
   background:#020617;
   border:1px solid #334155;
   border-radius:16px;
   padding:12px;
   display:none;
   min-width:220px;
-  z-index:5000; /* AU-DESSUS DES CARTES */
+  z-index:2000;
 }
 #countryMenu label{
   display:flex;
@@ -77,29 +100,40 @@ button:hover{transform:scale(1.05)}
 }
 
 /* CARD */
-#cardContainer{margin-top:30px;perspective:1200px;}
+#cardContainer{
+  margin-top:30px;
+  perspective:1200px;
+}
 .card{
-  width:92vw;max-width:440px;
-  height:65vh;max-height:560px;
+  width:92vw;
+  max-width:440px;
+  height:65vh;
+  max-height:560px;
   position:relative;
   transform-style:preserve-3d;
   transition:transform .6s;
 }
 .card.flip{transform:rotateY(180deg)}
+
 .face{
-  position:absolute;width:100%;height:100%;
+  position:absolute;
+  width:100%;
+  height:100%;
   backface-visibility:hidden;
   border-radius:22px;
   overflow:hidden;
   box-shadow:0 25px 60px rgba(0,0,0,.6);
   background:#020617;
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .face img{
   max-width:100%;
   max-height:100%;
   object-fit:contain;
 }
+
 .back{
   transform:rotateY(180deg);
   font-size:30px;
@@ -110,8 +144,11 @@ button:hover{transform:scale(1.05)}
 
 /* CONTROLS */
 #controls{
-  display:flex;gap:18px;margin:24px 0 40px;
-  flex-wrap:wrap;justify-content:center;
+  display:flex;
+  gap:18px;
+  margin:24px 0 40px;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 .good{background:#16a34a;font-size:20px;padding:16px 28px}
 .bad{background:#dc2626;font-size:20px;padding:16px 28px}
@@ -135,9 +172,7 @@ button:hover{transform:scale(1.05)}
   <button id="startBtn" class="start">▶ Démarrer</button>
   <button id="fullscreenBtn">⛶ Plein écran</button>
 
-  <div id="countryMenu">
-    <label>Russie <input type="checkbox" checked></label>
-  </div>
+  <div id="countryMenu"></div>
 </header>
 
 <div id="cardContainer">
@@ -158,7 +193,7 @@ button:hover{transform:scale(1.05)}
 /* PASSWORD */
 const PASSWORD="1234";
 const overlay=document.getElementById("passwordOverlay");
-document.getElementById("passwordBtn").onclick=()=>{
+passwordBtn.onclick=()=>{
   if(passwordInput.value===PASSWORD){
     overlay.style.display="none";
   }else{
@@ -166,35 +201,58 @@ document.getElementById("passwordBtn").onclick=()=>{
   }
 };
 
+/* VEHICULES */
+const vehicles={
+  "Russie":["T-55","T-62","T-64BV","T-72","T-80"],
+  "USA":["M1-ABRAMS","M2-BRADLEY","STRYKER","HMMWV"],
+  "Allemagne":["LEOPARD-2","FENNEK","WIESEL","BOXER"],
+  "France":["LECLERC","VBCI","AMX-10RC","VAB"],
+  "Royaume-Uni":["CHALLENGER-2","WARRIOR","JACKAL"],
+  "Espagne":["BMR-600","DRAGON"],
+  "Turquie":["COBRA"],
+  "Suisse":["EAGLE-IV"]
+};
+
+/* GENERATION CARTES */
+const cards=[];
+for(const country in vehicles){
+  vehicles[country].forEach(vehicle=>{
+    for(let i=1;i<=3;i++){
+      cards.push({
+        country:country,
+        name:vehicle,
+        img:`img-vehicule/${vehicle}-${i}.jpg`,
+        weight:1
+      });
+    }
+  });
+}
+
+/* MENU PAYS */
+const menu=document.getElementById("countryMenu");
+Object.keys(vehicles).forEach(country=>{
+  const label=document.createElement("label");
+  label.innerHTML=`${country} <input type="checkbox" checked value="${country}">`;
+  menu.appendChild(label);
+});
+
+countryBtn.onclick=e=>{
+  e.stopPropagation();
+  menu.style.display=menu.style.display==="block"?"none":"block";
+};
+document.addEventListener("click",()=>menu.style.display="none");
+
 /* CARTES */
-const cards=[
-  {img:"img-russie/T-55-1.jpg",name:"T-55",weight:1},
-  {img:"img-russie/T-55-2.jpg",name:"T-55",weight:1},
-  {img:"img-russie/T-55-3.jpg",name:"T-55",weight:1},
-  {img:"img-russie/T-62-1.jpg",name:"T-62",weight:1},
-  {img:"img-russie/T-62-2.jpg",name:"T-62",weight:1},
-  {img:"img-russie/T-62-3.jpg",name:"T-62",weight:1},
-  {img:"img-russie/T-64BV-1.jpg",name:"T-64BV",weight:1},
-  {img:"img-russie/T-64BV-2.jpg",name:"T-64BV",weight:1},
-  {img:"img-russie/T-64BV-3.jpg",name:"T-64BV",weight:1},
-  {img:"img-russie/T-72-1.jpg",name:"T-72",weight:1},
-  {img:"img-russie/T-72-2.jpg",name:"T-72",weight:1},
-  {img:"img-russie/T-72-3.jpg",name:"T-72",weight:1},
-  {img:"img-russie/T-80-1.jpg",name:"T-80",weight:1},
-  {img:"img-russie/T-80-2.jpg",name:"T-80",weight:1},
-  {img:"img-russie/T-80-3.jpg",name:"T-80",weight:1}
-];
-
-let started=false;
-let current=null;
-
+let started=false,current=null;
 const card=document.getElementById("card");
 const img=document.getElementById("cardImg");
 const back=document.getElementById("cardBack");
 
 function weightedRandom(){
+  const selected=[...menu.querySelectorAll("input:checked")].map(i=>i.value);
   const pool=[];
-  cards.forEach(c=>{for(let i=0;i<c.weight;i++)pool.push(c)});
+  cards.filter(c=>selected.includes(c.country))
+       .forEach(c=>{for(let i=0;i<c.weight;i++) pool.push(c)});
   return pool[Math.floor(Math.random()*pool.length)];
 }
 
@@ -206,10 +264,7 @@ function loadCard(){
 }
 
 /* START */
-startBtn.onclick=()=>{
-  started=true;
-  loadCard();
-};
+startBtn.onclick=()=>{started=true;loadCard();};
 
 /* FLIP */
 card.onclick=()=>started && card.classList.toggle("flip");
@@ -229,14 +284,6 @@ badBtn.onclick=()=>{
   current.weight+=2;
   setTimeout(loadCard,700);
 };
-
-/* MENU */
-countryBtn.onclick=e=>{
-  e.stopPropagation();
-  countryMenu.style.display=
-    countryMenu.style.display==="block"?"none":"block";
-};
-document.addEventListener("click",()=>countryMenu.style.display="none");
 
 /* FULLSCREEN */
 fullscreenBtn.onclick=()=>{
