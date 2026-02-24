@@ -3,216 +3,249 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flashcards Véhicules</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<title>Flashcards Chars</title>
 
 <style>
-html,body{
-  margin:0;padding:0;height:100%;
-  font-family:'Roboto',sans-serif;
-  background:#0f172a;color:#fff;
+*{box-sizing:border-box;font-family:system-ui,Arial}
+body{
+  margin:0;
+  background:#0f172a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
 }
 
-/* 🔒 LOGIN */
-#loginScreen{
+/* PASSWORD */
+#passwordOverlay{
   position:fixed;inset:0;
+  background:rgba(2,6,23,.95);
   display:flex;align-items:center;justify-content:center;
-  background:#020617;z-index:9999;
+  z-index:9999;
 }
-.login-box{
-  background:#111827;padding:35px;border-radius:16px;text-align:center;
+#passwordBox{
+  background:#020617;
+  border-radius:20px;
+  padding:30px;
+  width:90%;
+  max-width:340px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);
 }
-.login-box input{padding:12px;border-radius:8px;border:none;width:200px;}
-.login-box button{margin-top:15px;padding:12px 25px;border:none;border-radius:10px;background:#0ea5e9;color:#fff;font-weight:bold;cursor:pointer;}
-
-#site{display:none;flex-direction:column;height:100%;}
+#passwordBox input{
+  width:100%;padding:14px;border-radius:12px;border:none;margin:15px 0;
+}
+#passwordBox button{width:100%;background:#2563eb;color:#fff;padding:14px}
 
 /* HEADER */
 header{
-  display:flex;justify-content:center;gap:10px;padding:10px;
-  background:rgba(2,6,23,.95);position:relative;
+  width:100%;
+  background:#020617;
+  padding:12px;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  position:relative;
   z-index:1000;
 }
 button{
-  border:none;border-radius:14px;padding:12px 18px;font-weight:bold;
-  cursor:pointer;color:#fff;
+  border:none;border-radius:14px;padding:12px 20px;
+  font-size:15px;cursor:pointer;color:#fff;transition:.15s;
 }
-.btn-pays{background:linear-gradient(45deg,#7c3aed,#9333ea);}
-.btn-start{background:linear-gradient(45deg,#0284c7,#0ea5e9);}
-.btn-full{background:linear-gradient(45deg,#f59e0b,#facc15);color:#000;}
+button:hover{transform:scale(1.05)}
+.start{background:#0284c7;font-weight:700}
 
 /* MENU */
-#menu{
+#countryMenu{
   position:absolute;
   top:60px;
   left:50%;
   transform:translateX(-50%);
   background:#020617;
-  border:2px solid #475569;
-  border-radius:14px;
+  border:1px solid #334155;
+  border-radius:16px;
   padding:12px;
   display:none;
   min-width:220px;
-  max-height:55vh;
-  overflow:auto;
-  z-index:2000; /* ✅ au-dessus des cartes */
+  z-index:5000; /* AU-DESSUS DES CARTES */
+}
+#countryMenu label{
+  display:flex;
+  justify-content:space-between;
+  padding:10px;
 }
 
-/* CARTE */
-.card-container{flex:1;display:flex;align-items:center;justify-content:center;}
-.card{width:340px;height:500px;perspective:1200px;max-width:90vw;}
-.inner{
-  width:100%;height:100%;background:#1e293b;border-radius:20px;
-  transform-style:preserve-3d;transition:transform .7s;position:relative;
+/* CARD */
+#cardContainer{margin-top:30px;perspective:1200px;}
+.card{
+  width:92vw;max-width:440px;
+  height:65vh;max-height:560px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform .6s;
 }
-.flip{transform:rotateY(180deg);}
+.card.flip{transform:rotateY(180deg)}
 .face{
   position:absolute;width:100%;height:100%;
+  backface-visibility:hidden;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:0 25px 60px rgba(0,0,0,.6);
+  background:#020617;
   display:flex;align-items:center;justify-content:center;
-  backface-visibility:hidden;border-radius:20px;
 }
-.face img{width:100%;height:100%;object-fit:contain;}
+.face img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
 .back{
   transform:rotateY(180deg);
-  font-size:28px;
-  font-weight:bold;
+  font-size:30px;
+  font-weight:700;
   text-align:center;
   padding:20px;
 }
 
-/* CONTROLES */
-#controls{display:flex;justify-content:center;gap:15px;padding:10px;}
-.good{background:linear-gradient(45deg,#16a34a,#22c55e);}
-.bad{background:linear-gradient(45deg,#dc2626,#ef4444);}
+/* CONTROLS */
+#controls{
+  display:flex;gap:18px;margin:24px 0 40px;
+  flex-wrap:wrap;justify-content:center;
+}
+.good{background:#16a34a;font-size:20px;padding:16px 28px}
+.bad{background:#dc2626;font-size:20px;padding:16px 28px}
 </style>
 </head>
+
 <body>
 
-<!-- LOGIN -->
-<div id="loginScreen">
-  <div class="login-box">
+<!-- PASSWORD -->
+<div id="passwordOverlay">
+  <div id="passwordBox">
     <h2>🔒 Accès protégé</h2>
-    <input type="password" id="password" placeholder="Mot de passe">
-    <br>
-    <button onclick="checkPassword()">Entrer</button>
+    <input type="password" id="passwordInput" placeholder="Mot de passe">
+    <button id="passwordBtn">Valider</button>
+    <p id="passwordError" style="color:#f87171;display:none">Mot de passe incorrect</p>
   </div>
 </div>
 
-<div id="site">
 <header>
-  <button class="btn-pays" onclick="toggleMenu()">🌍 Pays</button>
-  <button class="btn-start" onclick="start()">▶ Démarrer</button>
-  <button class="btn-full" onclick="fullscreen()">⛶ Plein écran</button>
-  <div id="menu"></div>
+  <button id="countryBtn">🌍 Pays</button>
+  <button id="startBtn" class="start">▶ Démarrer</button>
+  <button id="fullscreenBtn">⛶ Plein écran</button>
+
+  <div id="countryMenu">
+    <label>Russie <input type="checkbox" checked></label>
+  </div>
 </header>
 
-<div class="card-container">
-  <div class="card" onclick="flip()">
-    <div class="inner" id="inner">
-      <div class="face"><img id="img" src="img-vehicule/logo-du-6.jpg"></div>
-      <div class="face back" id="name">Nom du véhicule</div>
+<div id="cardContainer">
+  <div class="card" id="card">
+    <div class="face front">
+      <img id="cardImg" loading="lazy">
     </div>
+    <div class="face back" id="cardBack"></div>
   </div>
 </div>
 
 <div id="controls">
-  <button class="bad" onclick="bad()">❌ Faux</button>
-  <button class="good" onclick="good()">✅ Bon</button>
-</div>
+  <button class="bad" id="badBtn">❌ Mauvais</button>
+  <button class="good" id="goodBtn">✅ Bon</button>
 </div>
 
 <script>
+/* PASSWORD */
 const PASSWORD="1234";
-
-function checkPassword(){
-  if(password.value===PASSWORD){
-    loginScreen.style.display="none";
-    site.style.display="flex";
-  } else alert("Mot de passe incorrect");
-}
-
-/* VEHICULES */
-const vehicles={
-"Russie":["T-55","T-62","T-64BV","T-72","T-80"],
-"USA":["M1-ABRAMS","M2-BRADLEY","STRYKER","HMMWV"],
-"Allemagne":["LEOPARD-2","FENNEK","WIESEL","BOXER"],
-"France":["LECLERC","VBCI","AMX-10RC","VAB"],
-"Royaume-Uni":["CHALLENGER-2","WARRIOR","JACKAL"],
-"Espagne":["BMR-600","DRAGON"],
-"Turquie":["COBRA"],
-"Suisse":["EAGLE-IV"]
+const overlay=document.getElementById("passwordOverlay");
+document.getElementById("passwordBtn").onclick=()=>{
+  if(passwordInput.value===PASSWORD){
+    overlay.style.display="none";
+  }else{
+    passwordError.style.display="block";
+  }
 };
 
-const cards=[];
-for(const c in vehicles){
-  vehicles[c].forEach(v=>{
-    for(let i=1;i<=3;i++){
-      cards.push({country:c,name:v,img:`img-vehicule/${v}-${i}.jpg`,weight:1});
-    }
-  });
-}
-
-/* MENU */
-const menu=document.getElementById("menu");
-Object.keys(vehicles).forEach(c=>{
-  const label=document.createElement("label");
-  label.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
-  menu.appendChild(label);
-});
-
-function toggleMenu(){
-  menu.style.display=menu.style.display==="block"?"none":"block";
-}
-
-/* ferme menu si clic ailleurs */
-document.addEventListener("click",e=>{
-  if(!menu.contains(e.target) && !e.target.classList.contains("btn-pays")){
-    menu.style.display="none";
-  }
-});
-
 /* CARTES */
-let started=false,current;
+const cards=[
+  {img:"img-russie/T-55-1.jpg",name:"T-55",weight:1},
+  {img:"img-russie/T-55-2.jpg",name:"T-55",weight:1},
+  {img:"img-russie/T-55-3.jpg",name:"T-55",weight:1},
+  {img:"img-russie/T-62-1.jpg",name:"T-62",weight:1},
+  {img:"img-russie/T-62-2.jpg",name:"T-62",weight:1},
+  {img:"img-russie/T-62-3.jpg",name:"T-62",weight:1},
+  {img:"img-russie/T-64BV-1.jpg",name:"T-64BV",weight:1},
+  {img:"img-russie/T-64BV-2.jpg",name:"T-64BV",weight:1},
+  {img:"img-russie/T-64BV-3.jpg",name:"T-64BV",weight:1},
+  {img:"img-russie/T-72-1.jpg",name:"T-72",weight:1},
+  {img:"img-russie/T-72-2.jpg",name:"T-72",weight:1},
+  {img:"img-russie/T-72-3.jpg",name:"T-72",weight:1},
+  {img:"img-russie/T-80-1.jpg",name:"T-80",weight:1},
+  {img:"img-russie/T-80-2.jpg",name:"T-80",weight:1},
+  {img:"img-russie/T-80-3.jpg",name:"T-80",weight:1}
+];
 
-function selected(){
-  const sel=[...menu.querySelectorAll("input:checked")].map(i=>i.value);
-  return cards.filter(c=>sel.includes(c.country));
-}
+let started=false;
+let current=null;
 
-function randomCard(){
+const card=document.getElementById("card");
+const img=document.getElementById("cardImg");
+const back=document.getElementById("cardBack");
+
+function weightedRandom(){
   const pool=[];
-  selected().forEach(c=>{
-    for(let i=0;i<c.weight;i++) pool.push(c);
-  });
+  cards.forEach(c=>{for(let i=0;i<c.weight;i++)pool.push(c)});
   return pool[Math.floor(Math.random()*pool.length)];
 }
 
 function loadCard(){
-  inner.classList.remove("flip");
-  current=randomCard();
+  card.classList.remove("flip");
+  current=weightedRandom();
   img.src=current.img;
-  name.textContent=current.name; /* ✅ réponse toujours visible */
+  back.textContent=current.name;
 }
 
-function start(){started=true;loadCard();}
-function flip(){if(started)inner.classList.toggle("flip");}
+/* START */
+startBtn.onclick=()=>{
+  started=true;
+  loadCard();
+};
 
-function good(){
-  if(!inner.classList.contains("flip")) flip();
+/* FLIP */
+card.onclick=()=>started && card.classList.toggle("flip");
+
+/* BON */
+goodBtn.onclick=()=>{
+  if(!started) return;
+  if(!card.classList.contains("flip")) card.classList.add("flip");
   current.weight=Math.max(1,current.weight-1);
   setTimeout(loadCard,700);
-}
+};
 
-function bad(){
-  if(!inner.classList.contains("flip")) flip();
+/* MAUVAIS */
+badBtn.onclick=()=>{
+  if(!started) return;
+  if(!card.classList.contains("flip")) card.classList.add("flip");
   current.weight+=2;
   setTimeout(loadCard,700);
-}
+};
 
-function fullscreen(){
-  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
-  else document.exitFullscreen();
-}
+/* MENU */
+countryBtn.onclick=e=>{
+  e.stopPropagation();
+  countryMenu.style.display=
+    countryMenu.style.display==="block"?"none":"block";
+};
+document.addEventListener("click",()=>countryMenu.style.display="none");
+
+/* FULLSCREEN */
+fullscreenBtn.onclick=()=>{
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen();
+  }else{
+    document.exitFullscreen();
+  }
+};
 </script>
 
 </body>
