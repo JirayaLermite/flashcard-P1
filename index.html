@@ -10,21 +10,55 @@ html,body{
   margin:0;padding:0;height:100%;
   font-family:'Roboto',sans-serif;
   background:#0f172a;color:#fff;
-  display:flex;flex-direction:column;align-items:center;
 }
+
+/* 🔒 ÉCRAN DE CONNEXION */
+#loginScreen{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#020617;
+  z-index:999;
+}
+.login-box{
+  background:#111827;
+  padding:30px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,0,0,.6);
+}
+.login-box input{
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  margin-top:10px;
+  width:180px;
+}
+.login-box button{
+  margin-top:15px;
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  background:#0ea5e9;
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* SITE (caché au départ) */
+#site{display:none;flex-direction:column;height:100%;}
 
 /* HEADER */
 header{
-  width:100%;
   display:flex;
   justify-content:center;
-  align-items:center;
   gap:10px;
   padding:10px;
-  background:rgba(2,6,23,0.95);
+  background:rgba(2,6,23,.95);
   flex-wrap:wrap;
 }
-
 button{
   border:none;
   border-radius:14px;
@@ -33,26 +67,9 @@ button{
   cursor:pointer;
   color:#fff;
 }
-
-/* boutons */
 .btn-pays{background:linear-gradient(45deg,#7c3aed,#9333ea);}
 .btn-start{background:linear-gradient(45deg,#0284c7,#0ea5e9);}
 .btn-full{background:linear-gradient(45deg,#f59e0b,#facc15);color:#000;}
-
-button:hover{transform:scale(1.05);}
-
-/* champ mdp */
-#passwordBox{
-  display:flex;
-  gap:6px;
-  align-items:center;
-}
-#password{
-  padding:8px;
-  border-radius:8px;
-  border:none;
-  width:90px;
-}
 
 /* MENU */
 #menu{
@@ -67,11 +84,6 @@ button:hover{transform:scale(1.05);}
   max-height:60vh;
   overflow:auto;
 }
-#menu label{
-  display:flex;
-  justify-content:space-between;
-  padding:6px;
-}
 
 /* CARTE */
 .card-container{
@@ -81,8 +93,7 @@ button:hover{transform:scale(1.05);}
   justify-content:center;
 }
 .card{
-  width:340px;
-  height:500px;
+  width:340px;height:500px;
   perspective:1200px;
   max-width:90vw;
 }
@@ -92,7 +103,6 @@ button:hover{transform:scale(1.05);}
   border-radius:20px;
   transform-style:preserve-3d;
   transition:transform .7s;
-  position:relative;
 }
 .flip{transform:rotateY(180deg);}
 .face{
@@ -100,44 +110,35 @@ button:hover{transform:scale(1.05);}
   width:100%;height:100%;
   display:flex;align-items:center;justify-content:center;
   backface-visibility:hidden;
-  border-radius:20px;
 }
-.face img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-.back{
-  transform:rotateY(180deg);
-  font-size:26px;
-  font-weight:bold;
-}
+.face img{width:100%;height:100%;object-fit:contain;}
+.back{transform:rotateY(180deg);font-size:26px;font-weight:bold;}
 
 /* CONTROLES */
-#controls{
-  display:flex;
-  gap:15px;
-  padding:10px;
-}
+#controls{display:flex;gap:15px;padding:10px;justify-content:center;}
 .good{background:linear-gradient(45deg,#16a34a,#22c55e);}
 .bad{background:linear-gradient(45deg,#dc2626,#ef4444);}
-
-@media(max-width:600px){
-  .card{width:85vw;height:120vw;}
-}
 </style>
 </head>
 <body>
 
+<!-- 🔒 Écran mot de passe -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>🔒 Accès protégé</h2>
+    <input type="password" id="password" placeholder="Mot de passe">
+    <br>
+    <button onclick="checkPassword()">Entrer</button>
+  </div>
+</div>
+
+<!-- 🌍 SITE -->
+<div id="site">
+
 <header>
   <button class="btn-pays" onclick="toggleMenu()">🌍 Pays</button>
-  <button class="btn-start" onclick="checkPassword()">▶ Démarrer</button>
+  <button class="btn-start" onclick="start()">▶ Démarrer</button>
   <button class="btn-full" onclick="fullscreen()">⛶ Plein écran</button>
-
-  <div id="passwordBox">
-    🔒 <input type="password" id="password" placeholder="MDP">
-  </div>
-
   <div id="menu"></div>
 </header>
 
@@ -157,20 +158,24 @@ button:hover{transform:scale(1.05);}
   <button class="good" onclick="good()">✅ Bon</button>
 </div>
 
+</div>
+
 <script>
 const PASSWORD="1234"; // 🔑 change ici
 
+function checkPassword(){
+  const val=document.getElementById("password").value;
+  if(val===PASSWORD){
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("site").style.display="flex";
+  } else alert("Mot de passe incorrect");
+}
+
+/* DATA */
 const vehicles={
-"Espagne":["VEC","VAMTAC","BMR-600","DRAGON"],
-"Turquie":["COBRA"],
-"Suisse":["EAGLE-IV"],
-"Chine":["PTL-02"],
-"Israël":["MAGACH-7C","SABRA"],
-"Italie":["ARIETE","CENTAURO","IVECO"],
-"Royaume-Uni":["CHALLENGER-2","JACKAL","SCIMITAR"],
-"Allemagne":["LEOPARD-2","FUCHS","WIESEL","FENNEK"],
+"Russie":["T-55","T-62","T-64BV","T-72","T-80"],
 "USA":["M1-ABRAMS","M-113","STRYKER","HUMMER"],
-"Russie":["T-55","T-62","T-64BV","T-72","T-80"]
+"Allemagne":["LEOPARD-2","FUCHS","WIESEL","FENNEK"]
 };
 
 const cards=[];
@@ -182,24 +187,17 @@ for(const c in vehicles){
   });
 }
 
+/* MENU */
 const menu=document.getElementById("menu");
 Object.keys(vehicles).forEach(c=>{
   const label=document.createElement("label");
   label.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
   menu.appendChild(label);
 });
+function toggleMenu(){menu.style.display=menu.style.display==="block"?"none":"block";}
 
-function toggleMenu(){
-  menu.style.display = menu.style.display==="block"?"none":"block";
-}
-
+/* CARTES */
 let started=false,current;
-
-function checkPassword(){
-  const input=document.getElementById("password").value;
-  if(input!==PASSWORD){ alert("Mot de passe incorrect"); return; }
-  start();
-}
 
 function selected(){
   const sel=[...menu.querySelectorAll("input:checked")].map(i=>i.value);
@@ -223,8 +221,18 @@ function loadCard(){
 
 function start(){started=true;loadCard();}
 function flip(){if(started)document.getElementById("inner").classList.toggle("flip");}
-function good(){current.weight=Math.max(1,current.weight-1);setTimeout(loadCard,700);}
-function bad(){current.weight+=2;setTimeout(loadCard,700);}
+
+function good(){
+  if(!document.getElementById("inner").classList.contains("flip")) flip();
+  current.weight=Math.max(1,current.weight-1);
+  setTimeout(loadCard,700);
+}
+
+function bad(){
+  if(!document.getElementById("inner").classList.contains("flip")) flip();
+  current.weight+=2;
+  setTimeout(loadCard,700);
+}
 
 function fullscreen(){
   if(!document.fullscreenElement) document.documentElement.requestFullscreen();
