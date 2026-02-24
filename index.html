@@ -9,138 +9,141 @@
 html, body {
   margin:0; padding:0; width:100%; height:100%;
   font-family:'Roboto',sans-serif;
-  background-color:#0f172a;
-  color:#fff;
+  background:#0f172a; color:#fff;
   display:flex; flex-direction:column; align-items:center;
 }
-
-/* MOT DE PASSE */
-#password-overlay {
-  position:fixed; top:0; left:0; width:100%; height:100%;
-  background: rgba(15,23,42,0.95);
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
-  z-index:999;
-}
-#password-overlay input {
-  padding:14px; font-size:18px; border-radius:10px; border:none;
-  margin-top:12px; width:80%; max-width:300px;
-}
-#password-overlay button {
-  margin-top:20px; padding:14px 24px; border-radius:12px; border:none;
-  font-weight:bold; font-size:18px; cursor:pointer; color:white;
-  background: linear-gradient(45deg,#0284c7,#0ea5e9); transition:0.3s;
-}
-#password-overlay button:hover { transform: scale(1.05); }
 
 /* HEADER */
 header {
   width:100%;
-  display:flex; justify-content:center; align-items:center;
-  flex-wrap:nowrap; background: rgba(2,6,23,0.95);
-  padding:10px; gap:10px; z-index:10; overflow-x:auto;
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  padding:10px;
+  background:rgba(2,6,23,0.95);
+  position:relative;
+  z-index:10;
 }
 header button {
-  border:none; border-radius:15px; padding:12px 20px; font-weight:bold;
-  font-size:16px; cursor:pointer; color:#fff; transition:0.3s; flex-shrink:0;
+  border:none;
+  border-radius:15px;
+  padding:12px 20px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#fff;
 }
-header button:first-child{ background: linear-gradient(45deg,#7c3aed,#9333ea);}
-header button.start{ background: linear-gradient(45deg,#0284c7,#0ea5e9);}
-header button.fullscreen-btn{ background: linear-gradient(45deg,#f59e0b,#facc15); color:#000; }
-header button:hover{ transform: scale(1.05); }
+header button:nth-child(1){background:linear-gradient(45deg,#7c3aed,#9333ea);}
+header button.start{background:linear-gradient(45deg,#0284c7,#0ea5e9);}
+header button.fullscreen-btn{background:linear-gradient(45deg,#f59e0b,#facc15); color:#000;}
 
-/* CARTE - portrait et plus grande */
+/* MENU DEROULANT */
+#menu {
+  position:absolute;
+  top:60px;
+  left:10px;
+  background:rgba(2,6,23,0.95);
+  border:2px solid #fff;
+  border-radius:12px;
+  padding:12px;
+  display:none;
+  box-shadow:0 4px 12px rgba(0,0,0,0.6);
+  max-height:60vh;
+  overflow:auto;
+}
+#menu label {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+#menu input { transform:scale(1.2); }
+
+/* CARTE */
 .card-container {
-  display:flex; justify-content:center; align-items:center; width:100%; margin-top:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex:1;
+  width:100%;
 }
 .card {
-  width:320px;
+  width:340px;
   max-width:90vw;
-  height:480px;
+  height:500px;
   max-height:80vh;
   perspective:1200px;
 }
 .inner {
-  width:100%; height:100%; border-radius:20px; background-color:#1e293b;
-  box-shadow:0 8px 20px rgba(0,0,0,0.5); position:relative;
-  transform-style:preserve-3d; transition: transform 0.7s;
+  width:100%; height:100%;
+  border-radius:20px;
+  background:#1e293b;
+  box-shadow:0 8px 20px rgba(0,0,0,0.5);
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.7s;
 }
-.flip { transform: rotateY(180deg); }
+.flip { transform:rotateY(180deg); }
 .face {
-  position:absolute; width:100%; height:100%; border-radius:20px;
+  position:absolute;
+  width:100%; height:100%;
+  border-radius:20px;
   display:flex; justify-content:center; align-items:center;
   backface-visibility:hidden;
 }
-.face img { width:100%; height:100%; object-fit:contain; border-radius:20px; }
-.back { transform:rotateY(180deg); font-size:26px; font-weight:bold; text-align:center; padding:10px; display:flex; justify-content:center; align-items:center; }
-
-/* MENU PAYS sous la carte */
-#menu {
-  background: rgba(2,6,23,0.95);
-  border-radius:12px;
-  padding:12px;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  max-width:90vw;
-  border:2px solid #fff;
-  margin:10px 0;
+.face img {
+  width:100%; height:100%;
+  object-fit:contain;
+  border-radius:20px;
 }
-#menu label {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:6px 10px;
-  cursor:pointer;
-  border-radius:8px;
-  background: rgba(15,23,42,0.7);
+.back {
+  transform:rotateY(180deg);
+  font-size:26px;
+  font-weight:bold;
 }
-#menu input[type="checkbox"] { transform: scale(1.3); margin-left:6px; }
 
-/* CONTROLS */
+/* BOUTONS */
 #controls {
-  display:flex; justify-content:center; gap:15px;
+  display:flex;
+  gap:15px;
   padding:10px;
-  margin-bottom:20px;
 }
-#controls button{
-  font-size:18px; font-weight:bold; border-radius:16px;
-  padding:12px 24px; box-shadow:0 4px 12px rgba(0,0,0,0.5);
-  cursor:pointer; transition:all 0.3s;
+#controls button {
+  font-size:18px;
+  padding:12px 26px;
+  border-radius:16px;
+  border:2px solid #fff;
+  font-weight:bold;
+  cursor:pointer;
 }
-#controls .good{ background: linear-gradient(45deg,#16a34a,#22c55e); border:2px solid #fff;}
-#controls .bad{ background: linear-gradient(45deg,#dc2626,#ef4444); border:2px solid #fff;}
-#controls button:hover{ transform:scale(1.05); }
+.good { background:linear-gradient(45deg,#16a34a,#22c55e); }
+.bad { background:linear-gradient(45deg,#dc2626,#ef4444); }
 
 @media (max-width:600px){
-  .card{width:80vw; height:120vw;}
-  .back{font-size:22px;}
-  #menu{max-width:95vw;}
+  .card{ width:80vw; height:120vw; }
 }
 </style>
 </head>
 <body>
 
-<div id="password-overlay">
-  <h1>🔒 Entrez le mot de passe</h1>
-  <input type="password" id="password-input" placeholder="Mot de passe">
-  <button onclick="checkPassword()">Valider</button>
-</div>
-
 <header>
   <button onclick="toggleMenu()">🌍 Pays</button>
   <button class="start" onclick="start()">▶ Démarrer</button>
   <button class="fullscreen-btn" onclick="fullscreen()">⛶ Plein écran</button>
+
+  <div id="menu"></div>
 </header>
 
 <div class="card-container">
   <div class="card" onclick="flip()">
     <div class="inner" id="inner">
-      <div class="face"><img id="img" src="img-vehicule/logo-du-6.jpg" loading="lazy"></div>
+      <div class="face">
+        <img id="img" src="img-vehicule/logo-du-6.jpg">
+      </div>
       <div class="face back" id="name"></div>
     </div>
   </div>
 </div>
-
-<div id="menu"></div>
 
 <div id="controls">
   <button class="bad" onclick="bad()">❌ Faux</button>
@@ -148,13 +151,6 @@ header button:hover{ transform: scale(1.05); }
 </div>
 
 <script>
-const PASSWORD = "1234";
-function checkPassword(){
-  const val = document.getElementById("password-input").value;
-  if(val===PASSWORD){ document.getElementById("password-overlay").style.display="none"; document.body.style.display="flex"; }
-  else alert("Mot de passe incorrect !");
-}
-
 const vehicles={
 "Espagne":["VEC","VAMTAC","BMR-600","DRAGON"],
 "Turquie":["COBRA"],
@@ -165,52 +161,66 @@ const vehicles={
 "Royaume-Uni":["CHALLENGER-2","JACKAL","SCIMITAR"],
 "Allemagne":["LEOPARD-2","FUCHS","WIESEL","FENNEK"],
 "USA":["M1-ABRAMS","M-113","STRYKER","HUMMER"],
-"Russie":["BMD-1","BMD-2","BMD-3","BMD-4","BMP-1","BMP-2","BMP-3","BMP-T","BMP-T2","BMP-T72","BTR-60","BTR-70","BTR-80","BTR-80A","BRDM-2","BRDM-2-RKH","BRM-1","BRM-3KRYS","MTLB","T-55","T-62","T-64BV","T-72","T-80","T-90"]
+"Russie":["T-55","T-62","T-64BV","T-72","T-80"]
 };
 
 const cards=[];
 for(const country in vehicles){
   vehicles[country].forEach(v=>{
     for(let i=1;i<=3;i++){
-      cards.push({country,name:v,imgJpg:`img-vehicule/${v}-${i}.jpg`,imgPng:`img-vehicule/${v}-${i}.png`,weight:1});
+      cards.push({
+        country,
+        name:v,
+        img:`img-vehicule/${v}-${i}.jpg`,
+        weight:1
+      });
     }
   });
 }
 
 const menu=document.getElementById("menu");
-Object.keys(vehicles).forEach(c=>{ 
+Object.keys(vehicles).forEach(c=>{
   const label=document.createElement("label");
   label.innerHTML=`${c} <input type="checkbox" checked value="${c}">`;
   menu.appendChild(label);
 });
-function toggleMenu(){ menu.style.display = menu.style.display==="flex"?"none":"flex"; }
+
+function toggleMenu(){
+  menu.style.display = menu.style.display==="block" ? "none" : "block";
+}
 
 let current, started=false;
-function selectedCards(){ 
-  const selected=[...menu.querySelectorAll("input:checked")].map(i=>i.value); 
-  return cards.filter(c=>selected.includes(c.country)); 
+
+function selectedCards(){
+  const selected=[...menu.querySelectorAll("input:checked")].map(i=>i.value);
+  return cards.filter(c=>selected.includes(c.country));
 }
-function randomCard(){ 
+
+function randomCard(){
   const pool=[];
-  selectedCards().forEach(c=>{for(let i=0;i<c.weight;i++) pool.push(c);}); 
-  return pool[Math.floor(Math.random()*pool.length)]; 
+  selectedCards().forEach(c=>{
+    for(let i=0;i<c.weight;i++) pool.push(c);
+  });
+  return pool[Math.floor(Math.random()*pool.length)];
 }
-function loadImage(card){ 
-  const img=document.getElementById("img"); 
-  img.src=card.imgJpg; 
-  img.onerror=()=>{ img.src=card.imgPng; }; 
+
+function loadCard(){
+  document.getElementById("inner").classList.remove("flip");
+  current=randomCard();
+  document.getElementById("img").src=current.img;
+  setTimeout(()=>{ document.getElementById("name").textContent=current.name; },120);
 }
-function loadCard(){ 
-  document.getElementById("inner").classList.remove("flip"); 
-  current=randomCard(); 
-  loadImage(current); 
-  setTimeout(()=>{document.getElementById("name").textContent=current.name;},120); 
-}
+
 function start(){ started=true; loadCard(); }
 function flip(){ if(started) document.getElementById("inner").classList.toggle("flip"); }
-function good(){ if(!document.getElementById("inner").classList.contains("flip")) flip(); current.weight=Math.max(1,current.weight-1); setTimeout(loadCard,700);}
-function bad(){ if(!document.getElementById("inner").classList.contains("flip")) flip(); current.weight+=2; setTimeout(loadCard,700);}
-function fullscreen(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+function good(){ current.weight=Math.max(1,current.weight-1); setTimeout(loadCard,600); }
+function bad(){ current.weight+=2; setTimeout(loadCard,600); }
+
+function fullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
 </script>
+
 </body>
 </html>
